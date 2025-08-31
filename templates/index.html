@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ham/Spam Prediction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    label { display:block; margin:.5rem 0 .25rem }
+    input { width: 250px; padding:.4rem }
+    .row { margin-bottom:.75rem }
+    .buttons { display:flex; gap:.5rem; margin-top:1rem }
+    .result { margin-top:1rem; padding:.75rem; background:#f4f6f8; border-radius:6px }
+  </style>
+</head>
+<body>
+  <h1>Ham/Spam Prediction App</h1>
+
+  <form method="post">
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+    
+      <div>
+        <label for="word_freq_address">Word Frequency - Address</label>
+        <input id="word_freq_address" name="word_freq_address" type="number" step="any" required value="{{ values.word_freq_address }}">
+      </div>
+
+      <div>
+        <label for="word_freq_3d">Word Frequency - 3d</label>
+        <input id="word_freq_3d" name="word_freq_3d" type="number" step="any" required value="{{ values.word_freq_3d }}">
+      </div>
+
+      <div>
+        <label for="word_freq_you">Word Frequency - you</label>
+        <input id="word_freq_you" name="word_freq_you" type="number" step="any" required value="{{ values.word_freq_you }}">
+      </div>
+
+      <div>
+        <label for="word_freq_your">Word Frequency - your</label>
+        <input id="word_freq_your" name="word_freq_your" type="number" step="any" required value="{{ values.word_freq_your }}">
+      </div>
+
+      <div>
+        <label for="word_freq_font">Word Frequency - font</label>
+        <input id="word_freq_font" name="word_freq_font" type="number" step="any" required value="{{ values.word_freq_font }}">
+      </div>
+
+      <div>
+        <label for="word_freq_hp">Word Frequency - hp</label>
+        <input id="word_freq_hp" name="word_freq_hp" type="number" step="any" required value="{{ values.word_freq_hp }}">
+      </div>
+
+      <div>
+        <label for="word_freq_george">Word Frequency - George</label>
+        <input id="word_freq_george" name="word_freq_george" type="number" step="any" required value="{{ values.word_freq_george }}">
+      </div>
+
+      <div>
+        <label for="word_freq_re">Word Frequency - re</label>
+        <input id="word_freq_re" name="word_freq_re" type="number" step="any" required value="{{ values.word_freq_re }}">
+      </div>
+
+      <div>
+        <label for="word_freq_edu">Word Frequency - edu</label>
+        <input id="word_freq_edu" name="word_freq_edu" type="number" step="any" required value="{{ values.word_freq_edu }}">
+      </div>
+
+      <div>
+        <label for="capital_run_length_average">Average Length</label>
+        <input id="capital_run_length_average" name="capital_run_length_average" type="number" step="any" required value="{{ values.capital_run_length_average }}">
+      </div>
+
+      <div class="row">
+        <label for="capital_run_length_longest">Longest Length</label>
+        <input id="capital_run_length_longest" name="capital_run_length_longest" type="number" step="any" required value="{{ values.capital_run_length_longest }}">
+      </div>
+
+      <div>
+        <label for="capital_run_length_total">Total Length</label>
+        <input id="capital_run_length_total" name="capital_run_length_total" type="number" step="any" required value="{{ values.capital_run_length_total }}">
+      </div>
+
+    </div>    
+
+    <div style="margin-top: 1rem;">
+        <button type="submit" name="predict">Predict</button>
+        <button type="submit" name="clear">Clear</button>
+    </div>
+  </form>
+
+  {% if prediction %}
+  <div style="margin-top: 1rem; padding: 0.75rem; background: #f4f6f8; border-radius: 6px;">
+    {{ prediction | replace('\n', '<br>') | safe }}
+  </div>
+  {% endif %}
+</body>
+</html>
