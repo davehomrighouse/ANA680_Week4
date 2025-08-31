@@ -1,0 +1,7 @@
+Flask
+gunicorn
+numpy
+imbalanced-learn
+scikit-learn
+pandas
+
