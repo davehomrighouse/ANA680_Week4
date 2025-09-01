@@ -1,1 +1,1 @@
-web: gunicorn ham_spam_app:app
+web: gunicorn iris_species_prediction_app:app
