@@ -1,95 +1,76 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Ham/Spam Prediction</title>
+  <title>Iris Species Prediction</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    label { display:block; margin:.5rem 0 .25rem }
-    input { width: 250px; padding:.4rem }
-    .row { margin-bottom:.75rem }
-    .buttons { display:flex; gap:.5rem; margin-top:1rem }
-    .result { margin-top:1rem; padding:.75rem; background:#f4f6f8; border-radius:6px }
+    body {
+      font-family: sans-serif;
+    }
+    label { 
+      margin:.25rem 0; 
+      display:block; 
+      font-size: 0.9rem; 
+    }
+    input { 
+      width: 80px; 
+      padding:.3rem; 
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, auto); /* auto so it fits the input width */
+      gap: 0.375rem; /* tighter spacing between fields */
+      align-items: end; /* keeps inputs aligned */
+      margin-bottom: 1rem;
+    }
+    .buttons { 
+      display:flex; 
+      gap:0.25rem; /* tighter spacing between buttons */
+      margin-top:1rem 
+    }
+    .result { 
+      margin-top:1rem; 
+      padding:.375rem; 
+      background:#f4f6f8; 
+      border-radius:6px 
+    }
   </style>
 </head>
 <body>
-  <h1>Ham/Spam Prediction App</h1>
+  <h1>Iris Species Prediction App</h1>
 
   <form method="post">
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-    
+    <div class="form-grid">
       <div>
-        <label for="word_freq_address">Word Frequency - Address</label>
-        <input id="word_freq_address" name="word_freq_address" type="number" step="any" required value="{{ values.word_freq_address }}">
-      </div>
-
-      <div>
-        <label for="word_freq_3d">Word Frequency - 3d</label>
-        <input id="word_freq_3d" name="word_freq_3d" type="number" step="any" required value="{{ values.word_freq_3d }}">
+        <label for="sepal_length">Sepal Length</label>
+        <input id="sepal_length" name="sepal_length" type="number" step="any" required value="{{ values.sepal_length }}">
       </div>
 
       <div>
-        <label for="word_freq_you">Word Frequency - you</label>
-        <input id="word_freq_you" name="word_freq_you" type="number" step="any" required value="{{ values.word_freq_you }}">
+        <label for="sepal_width">Sepal Width</label>
+        <input id="sepal_width" name="sepal_width" type="number" step="any" required value="{{ values.sepal_width }}">
       </div>
 
       <div>
-        <label for="word_freq_your">Word Frequency - your</label>
-        <input id="word_freq_your" name="word_freq_your" type="number" step="any" required value="{{ values.word_freq_your }}">
+        <label for="petal_length">Petal Length</label>
+        <input id="petal_length" name="petal_length" type="number" step="any" required value="{{ values.petal_length }}">
       </div>
 
       <div>
-        <label for="word_freq_font">Word Frequency - font</label>
-        <input id="word_freq_font" name="word_freq_font" type="number" step="any" required value="{{ values.word_freq_font }}">
+        <label for="petal_width">Petal Width</label>
+        <input id="petal_width" name="petal_width" type="number" step="any" required value="{{ values.petal_width }}">
       </div>
-
-      <div>
-        <label for="word_freq_hp">Word Frequency - hp</label>
-        <input id="word_freq_hp" name="word_freq_hp" type="number" step="any" required value="{{ values.word_freq_hp }}">
-      </div>
-
-      <div>
-        <label for="word_freq_george">Word Frequency - George</label>
-        <input id="word_freq_george" name="word_freq_george" type="number" step="any" required value="{{ values.word_freq_george }}">
-      </div>
-
-      <div>
-        <label for="word_freq_re">Word Frequency - re</label>
-        <input id="word_freq_re" name="word_freq_re" type="number" step="any" required value="{{ values.word_freq_re }}">
-      </div>
-
-      <div>
-        <label for="word_freq_edu">Word Frequency - edu</label>
-        <input id="word_freq_edu" name="word_freq_edu" type="number" step="any" required value="{{ values.word_freq_edu }}">
-      </div>
-
-      <div>
-        <label for="capital_run_length_average">Average Length</label>
-        <input id="capital_run_length_average" name="capital_run_length_average" type="number" step="any" required value="{{ values.capital_run_length_average }}">
-      </div>
-
-      <div class="row">
-        <label for="capital_run_length_longest">Longest Length</label>
-        <input id="capital_run_length_longest" name="capital_run_length_longest" type="number" step="any" required value="{{ values.capital_run_length_longest }}">
-      </div>
-
-      <div>
-        <label for="capital_run_length_total">Total Length</label>
-        <input id="capital_run_length_total" name="capital_run_length_total" type="number" step="any" required value="{{ values.capital_run_length_total }}">
-      </div>
-
     </div>    
 
-    <div style="margin-top: 1rem;">
-        <button type="submit" name="predict">Predict</button>
-        <button type="submit" name="clear">Clear</button>
+    <div class="buttons">
+      <button type="submit" name="predict">Predict</button>
+      <button type="submit" name="clear">Clear</button>
     </div>
   </form>
 
   {% if prediction %}
-  <div style="margin-top: 1rem; padding: 0.75rem; background: #f4f6f8; border-radius: 6px;">
+  <div class="result">
     {{ prediction | replace('\n', '<br>') | safe }}
   </div>
   {% endif %}
