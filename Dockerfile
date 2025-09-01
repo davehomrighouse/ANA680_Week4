@@ -1,23 +1,21 @@
-# Python base image
-FROM python:3.10-slim
+FROM python:3.11-slim
 
-# Set working directory
+# Set up environment
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Workdir inside the container
 WORKDIR /app
 
-# Install dependencies
+# Install Python dependicies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy the rest of your Flask app code
+# Copy the rest
 COPY . .
 
-# Flask settings
-ENV FLASK_APP=ham_spam_app.py:app \
-    FLASK_RUN_HOST=0.0.0.0
-
-# Expose Flask’s default port
+# Flask dev server will listen on 5000
 EXPOSE 5000
 
-# Start the server (flask run)
-
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "ham_spam_app:app"]
+# Start the app
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "iris-species-prediction-app.py"]
