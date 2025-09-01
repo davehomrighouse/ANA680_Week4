@@ -11,6 +11,12 @@ app.secret_key = "what_a_pain"
 # Model's features that will appear on the form
 FORM_FIELDS = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
 
+SPECIES_MAP = {
+    0: "setosa",
+    1: "versicolor",
+    2: "virginica"
+}
+
 def make_prediction(form_data):
     pred = None
 
@@ -39,11 +45,11 @@ def make_prediction(form_data):
     X_df = pd.DataFrame([row], columns=TRAIN_COLS)
 
     # Predict species
-    prediction = final_model.predict(X_df)
-    prediction_result = "ham" if prediction[0] == 0 else "spam"
-    return f"Predicted species: {prediction_result}"
+    prediction = iris_model.predict(X_df)[0]   # e.g. 0, 1, or 2
+    label = SPECIES_MAP.get(int(prediction), f"Unknown ({pred})")
+    return f"Predicted species: {label}"
 
-# Load model, scaler, and encoders
+# Load model
 try:
   iris_model = pickle.load(open('lr.pkl', 'rb'))
 except FileNotFoundError as e:
