@@ -18,4 +18,4 @@ ENV PYTHONPATH=/app
 EXPOSE 5000
 
 # Start the server (flask run)
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "iris_app:app"]
+CMD ["gunicorn","-w","2","-b","0.0.0.0:5000","wsgi:app"]
