@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: iris-species-prediction-app
   labels:
-    app: iris-species-prediction
+    app: iris-species-prediction-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: iris-species-prediction
+      app: iris-species-prediction-app
   template:
     metadata:
       labels:
-        app: iris-species-prediction
+        app: iris-species-prediction-app
     spec:
       containers:
         - name: iris
-          image: iris-prediction-ml:latest
+          image: iris-prediction-ml:1.4
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
@@ -47,3 +47,4 @@ spec:
     - name: http
       port: 80          # external port users hit
       targetPort: 5000  # container port exposed by Gunicorn
+
