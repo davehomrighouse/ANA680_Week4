@@ -1,21 +1,21 @@
-FROM python:3.11-slim
+# Python base image
+FROM python:3.10-slim
 
-# Set up environment
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-# Workdir inside the container
+# Set working directory
 WORKDIR /app
 
-# Install Python dependicies
+# Install dependencies
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir gunicorn
 
-# Copy the rest
+# Copy the rest 
 COPY . .
 
-# Flask dev server will listen on 5000
+# Flask settings
+ENV PYTHONPATH=/app
+
+# Expose Flask’s default port
 EXPOSE 5000
 
-# Start the app
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "iris-species-prediction-app.py"]
+# Start the server (flask run)
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "model_training:app"]

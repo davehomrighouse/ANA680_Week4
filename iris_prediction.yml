@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: iris
-          image: iris-prediction-ml:1.4
+          image: homrighoused/iris-prediction-ml:1.4
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
@@ -38,13 +38,12 @@ kind: Service
 metadata:
   name: iris-service
   labels:
-    app: iris-species-prediction
+    app: iris-species-prediction-app
 spec:
-  type: LoadBalancer    # For minikube: `minikube service iris-service` (or switch to NodePort)
+  type: LoadBalancer    # For minikube: `minikube service iris-service`
   selector:
-    app: iris
+    app: iris-species-prediction-app
   ports:
     - name: http
       port: 80          # external port users hit
       targetPort: 5000  # container port exposed by Gunicorn
-

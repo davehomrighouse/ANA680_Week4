@@ -1,39 +1,46 @@
+from flask import Flask
+app = Flask(__name__)
+
 import joblib
-from sklearn.datasets import load_iris
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+import os
+import glob
+import pandas as pd
 
-if __name__ == "__main__":
-    # Load data
-    iris = load_iris()
-    x, y = iris.data, iris.target
-    target_names = iris.target_names
+from sklearn.linear_model import LinearRegression
 
-    # Train/test split (as requested)
-    x_train, x_test, y_train, y_test = train_test_split(
-        x, y, test_size=0.2, random_state=42, stratify=y
-    )
+if __name__ == '__main__':
 
-    # Simple, solid baseline model
-    pipe = Pipeline([
-        ("scaler", StandardScaler()),
-        ("lr", LogisticRegression(max_iter=500, n_jobs=None, random_state=42)),
-    ])
+    train_dir = os.environ.get("SM_CHANNEL_TRAIN", "data")
+    model_dir = os.environ.get("SM_MODEL_DIR", "model")
+    output_dir = os.environ.get("SM_OUTPUT_DATA_DIR", "output")
 
-    # Train
-    pipe.fit(x_train, y_train)
+    # Collect only CSV files
+    csv_files = sorted(glob.glob(os.path.join(train_dir, "*.csv")))
 
-    # Evaluate
-    y_pred = pipe.predict(x_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print("\nAccuracy: {:.3f}".format(accuracy))
-    print("\nConfusion matrix (rows=true, cols=pred):\n", confusion_matrix(y_test, y_pred))
-    print("\nClassification report:\n")
-    print(classification_report(y_test, y_pred, target_names=target_names))
+    if not csv_files:
+        raise FileNotFoundError(
+            f"No CSV files found under {train_dir}." +
+            "Check the Estimator.fit({...}) channel name ('train'), S3 path," +
+            " and IAM permissions.")
 
-    # Save model artifact for your app
-    joblib.dump(pipe, "iris_lr.joblib")
-    print("\nSaved trained model to iris_lr.joblib")
+    # 2) Read and concatenate
+    raw_dfs = (pd.read_csv(p) for p in csv_files)
+    train_data = pd.concat(raw_dfs, ignore_index=True)
+    print(f"Loaded {len(csv_files)} files → shape: {train_data.shape}")
+
+    # labels are in the first column
+    y_train = train_data.iloc[:, 0]
+    x_train = train_data.iloc[:, 1:]
+
+    # Train a linear regression model
+    lr = LinearRegression()
+    lr = lr.fit(x_train, y_train)
+
+    # Saves the fitted model
+    os.makedirs(model_dir, exist_ok=True)
+    joblib.dump(lr, os.path.join(model_dir, "lr_model.joblib"))
+
+
+def model_fn(model_dir):
+    lr = joblib.load(os.path.join(model_dir, "lr_model.joblib"))
+    return lr
