@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: iris
-          image: homrighoused/iris-prediction-ml:1.4
-          imagePullPolicy: IfNotPresent
+          image: homrighoused/iris-prediction-ml:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           readinessProbe:
